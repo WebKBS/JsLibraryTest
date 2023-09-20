@@ -1,13 +1,65 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>winwheel 룰렛</title>
-</head>
-<body>
+  </head>
+  <body>
+    <canvas id="canvas" width="412" height="412">
+      Canvas not supported, use another browser.
+    </canvas>
+    <script src="./Winwheel.min.js"></script>
+    <script src="./TweenMax.min.js"></script>
 
-</body>
+    <script>
+      let theWheel = new Winwheel({
+        canvasId: 'canvas',
+        numSegments: 8,
+        textAligment: 'center',
+        // 'textFontFamily'  : 'Courier',
+        textFontSize: 15,
+        textFillStyle: '#fff',
+        drawMode: 'image',
+        imageOverlay: true,
+        drawText: true,
+        rotationAngle: 0,
+        segments: [
+          { text: '1000\nMinTi' },
+          { text: 'DEFEAT' },
+          { text: 'x1' },
+          { text: '100 MinTi' },
+          { text: 'x100' },
+          { text: 'x20' },
+          { text: 'x10' },
+          { text: 'x50' },
+        ],
+        animation: {
+          type: 'spinToStop',
+          duration: 5,
+          spins: 8,
+        },
+      });
+      let loadedImg = new Image();
+      loadedImg.onload = function () {
+        theWheel.wheelImage = loadedImg;
+        theWheel.draw();
+      };
+
+      loadedImg.src = './images/wheel_img.png';
+
+      function alertPrize() {
+        // Call getIndicatedSegment() function to return pointer to the segment pointed to on wheel.
+        let winningSegment = theWheel.getIndicatedSegment();
+
+        // Basic alert of the segment text which is the prize name.
+        alert('You have won ' + winningSegment.text + '!');
+      }
+    </script>
+    <button onClick="theWheel.startAnimation();">버튼</button>
+  </body>
 </html>
