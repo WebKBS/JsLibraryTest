@@ -7,27 +7,34 @@
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <link rel="stylesheet" href="./wheel.css" />
     <title>winwheel 룰렛</title>
   </head>
   <body>
-    <canvas id="canvas" width="412" height="412">
-      Canvas not supported, use another browser.
-    </canvas>
+    <div id="wheelWrap">
+      <canvas id="canvas" width="412" height="412">
+        Canvas not supported, use another browser.
+      </canvas>
+      <img class="wheel-point" src="./images/point.png" alt="wheel point" />
+    </div>
     <script src="./Winwheel.min.js"></script>
     <script src="./TweenMax.min.js"></script>
 
     <script>
+      let wheelState = false; // 휠의 동작 상태 제어
+
       let theWheel = new Winwheel({
         canvasId: 'canvas',
         numSegments: 8,
         textAligment: 'center',
         // 'textFontFamily'  : 'Courier',
-        textFontSize: 15,
-        textFillStyle: '#fff',
+        textFontSize: 20,
+        textFillStyle: '#fff', // 글자 색상
         drawMode: 'image',
-        imageOverlay: true,
-        drawText: true,
-        rotationAngle: 0,
+        // imageOverlay: true,
+        drawText: true, // 글자 설정할건지?
+        rotationAngle: 0, // 시작시 rotate
         segments: [
           { text: '1000\nMinTi' },
           { text: 'DEFEAT' },
@@ -42,6 +49,7 @@
           type: 'spinToStop',
           duration: 5,
           spins: 8,
+          callbackFinished: 'alertPrize()',
         },
       });
       let loadedImg = new Image();
@@ -50,16 +58,36 @@
         theWheel.draw();
       };
 
-      loadedImg.src = './images/wheel_img.png';
+      loadedImg.src = './images/wheel.png';
 
       function alertPrize() {
-        // Call getIndicatedSegment() function to return pointer to the segment pointed to on wheel.
+        //  getIndicatedSegment() 세그먼트에 대한 포인터를 반환함
         let winningSegment = theWheel.getIndicatedSegment();
 
-        // Basic alert of the segment text which is the prize name.
-        alert('You have won ' + winningSegment.text + '!');
+        console.log(winningSegment.text);
+      }
+
+      function startWheel() {
+        if (wheelState === false) {
+          console.log('진행중');
+          theWheel.startAnimation();
+          wheelState = true;
+        }
+      }
+
+      function resetWheel() {
+        theWheel.stopAnimation(false); // 애니메이션 정지
+        theWheel.rotationAngle = 0; // 돌림판 위치 리셋
+        theWheel.draw(); // 변경사항을 다시 랜더링
+
+        wheelState = false; // 휠 상태 리셋
       }
     </script>
-    <button onClick="theWheel.startAnimation();">버튼</button>
+
+    <button onClick="startWheel()">버튼</button>
+    <button onClick="resetWheel();">리셋</button>
+    <!-- 룰렛 중지 -->
+    <!-- <button onClick="console.log(theWheel)">상세</button> -->
+    <!-- <button onClick="console.dir(Object.getPrototypeOf(mySwiper))">상세</button> -->
   </body>
 </html>

@@ -1,0 +1,11 @@
+#wheelWrap {
+  position: relative;
+  width: 412px;
+}
+
+#wheelWrap .wheel-point {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
